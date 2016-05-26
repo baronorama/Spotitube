@@ -1,7 +1,5 @@
 package ica.oose.spotitube.domain;
 
-import ica.oose.spotitube.datasource.util.PlaylistDAO;
-
 /**
  * Created by Vincent on 4-12-2015.
  */
@@ -30,9 +28,7 @@ public class Playlist {
 /* playlist may not change owners! */
     public String setOwner(String owner) {
         return "Owner may not be changed.";
-
     }
-
 
     public int getPlaylistId() {
         return playlistId;

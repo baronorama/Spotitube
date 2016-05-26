@@ -13,16 +13,21 @@
         <title>Spotitube</title>
     </head>
     <body>
-        <h1>Welcome to Spotitube!</h1>
-        <p>It's the worst app you'll ever see, but that's okay: We're here to learn.<br/>
+        <h1>Welcome to Spotitube, ++-edition!</h1>
+        <p>It's a work in progress, but that's okay: We're here to learn.<br/>
         Cheers.</p>
         <p>
             <a href="viewPlaylists.jsp">opvragen playlists per gebruiker</a> <br />
             <a href="viewTracks.jsp">opvragen tracks per band</a> <br />
+            <a href="managePlaylists.jsp">Manage playlists</a><br/>
             <a href="manageTracks.jsp">Manage tracks</a><br/>
+            <a href="manageUsers.jsp">Manage users</a><br/>
+            <a href="viewManager.jsp">Beheerders pagina</a><br/>
+
             <br/>
             <a href="/spotitube/tracks">tracks</a><br/>
-        </p>
+            <a href="/spotitube/users">users</a><br/>
 
+        </p>
     </body>
 </html>

@@ -18,15 +18,15 @@ import java.util.logging.Logger;
 @Singleton
 public class TrackDAO {
     private Logger logger = Logger.getLogger(TrackDAO.class.getName());
-    private DatabaseProperties databaseProperties;
+    private final DatabaseProperties databaseProperties;
 
     @Inject
     public TrackDAO(DatabaseProperties databaseProperties) {
         this.databaseProperties = databaseProperties;
-        tryLoadJdbcDriver(databaseProperties);
+        tryLoadJdbcDriver();
     }
 
-    private void tryLoadJdbcDriver(DatabaseProperties databaseProperties) {
+    private void tryLoadJdbcDriver() {
         try {
             Class.forName(databaseProperties.driver());
         } catch (ClassNotFoundException e) {
@@ -40,7 +40,7 @@ public class TrackDAO {
         return tracks;
     }
 
-    public void tryFindAll(List<Track> tracks) {
+    private void tryFindAll(List<Track> tracks) {
         String GET_QUERY = "SELECT * FROM track";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());

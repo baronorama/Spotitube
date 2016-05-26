@@ -29,6 +29,45 @@ public class PlaylistDAO {
             logger.log(Level.SEVERE, "Can't load JDBC driver " + databaseProperties.driver(), e);
         }
     }
+    public List<Playlist> select(Integer playlistId) {
+        List<Playlist> playlists = new ArrayList<>();
+        trySelect(playlists, playlistId);
+        return playlists;
+    }
+
+    public void trySelect(List<Playlist> playlists, int playlistId) {
+        String SELECT_QUERY = "SELECT * FROM playlist WHERE playlistId = ?";
+        try {
+            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatementSelect = connection.prepareStatement(SELECT_QUERY);
+            preparedStatementSelect.setInt(1, playlistId);
+            addNewItemsFromDatabase(playlists, preparedStatementSelect);
+            preparedStatementSelect.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "PlaylistDAO.select() crashed {0} ", e);
+        }
+    }
+
+    public List<Playlist> findAll() {
+        List<Playlist> playlists = new ArrayList<>();
+        tryFindAll(playlists);
+        return playlists;
+    }
+
+    public void tryFindAll(List<Playlist> playlists) {
+        String SELECT_QUERY = "SELECT * FROM playlist";
+        try {
+            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);
+            addNewItemsFromDatabase(playlists, preparedStatement);
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e){
+            logger.log(Level.SEVERE, "PlaylistDAO.findAll crashed {0} ", e);
+        }
+    }
 
     public List<Playlist> findByOwner(String owner) {
         List<Playlist> playlists = new ArrayList<>();
@@ -78,8 +117,9 @@ public class PlaylistDAO {
             PreparedStatement preparedStatementInsert = connection.prepareStatement(INSERT_QUERY);
             preparedStatementInsert.setString(1, owner);
             preparedStatementInsert.setString(2, name);
+            System.out.println(INSERT_QUERY);
             preparedStatementInsert.executeUpdate();
-            preparedStatementInsert.close();
+            connection.commit();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "PlaylistDAO.insert() crashed: {0} ", e);
         }
@@ -94,28 +134,12 @@ public class PlaylistDAO {
             preparedStatementUpdate.setString(1, name);
             preparedStatementUpdate.setInt(2, playlistId);
             preparedStatementUpdate.executeUpdate();
-            preparedStatementUpdate.close();
+            connection.commit();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "PlaylistDAO.update() crashed {0} ", e);
         }
     }
 
-    @SuppressWarnings("Duplicates")
-    public void select(Integer playlistId) {
-        String SELECT_QUERY = "SELECT * FROM playlist WHERE playlistId = ?";
-        try {
-            Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
-            connection.setAutoCommit(false);
-            PreparedStatement preparedStatementSelect = connection.prepareStatement(SELECT_QUERY);
-            preparedStatementSelect.setInt(1, playlistId);
-            preparedStatementSelect.executeQuery();
-            preparedStatementSelect.close();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "PlaylistDAO.select() crashed {0} ", e);
-        }
-    }
-
-    @SuppressWarnings("Duplicates")
     public void delete(Integer playlistId) {
         String DELETE_QUERY = "DELETE FROM playlist WHERE playlistId = ?";
         try {
@@ -123,8 +147,8 @@ public class PlaylistDAO {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatementDelete = connection.prepareStatement(DELETE_QUERY);
             preparedStatementDelete.setInt(1, playlistId);
-            preparedStatementDelete.executeQuery();
-            preparedStatementDelete.close();
+            preparedStatementDelete.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "PlaylistDAO.delete() crashed {0} ", e);
         }

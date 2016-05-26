@@ -5,12 +5,8 @@
 
 package ica.oose.spotitube.presentation.controller;
 
-import com.google.inject.Inject;
-import ica.oose.spotitube.datasource.util.DatabaseProperties;
-import ica.oose.spotitube.datasource.util.TrackDAO;
 import ica.oose.spotitube.domain.Track;
 import ica.oose.spotitube.services.TrackService;
-import ica.oose.spotitube.services.TrackServiceInterface;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
@@ -22,37 +18,39 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Vincent on 4-12-2015.
+ * TrackPageController is used for catching urls concerning tracks.
+ * @author Vincent Heemskerk
  */
 @Singleton
-@WebServlet(name="TrackPageController",
+@WebServlet(name = "TrackPageController",
         loadOnStartup = 1,
         urlPatterns = {"/tracks",
                 "/tracksByPerformer",
                 "/addTrack",
                 "/deleteTrack"})
 public class TrackPageController extends HttpServlet {
+
+    private TrackService trackService = new TrackService();
+    private List<Track> tracks;
+
     /**
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @author Vincent Heemskerk
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
      */
-
-    TrackService trackService = new TrackService();
-    List<Track> tracks;
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
         throws ServletException, IOException {
         String userPath = request.getServletPath();
+        System.out.println(userPath);
 
-        if(userPath.equals("/tracks")) {
+        if (userPath.equals("/tracks")) {
             tracks = trackService.findAll();
             request.setAttribute("tracks", tracks);
-        }
-        else if (userPath.equals("/tracksByPerformer")) {
+        } else if (userPath.equals("/tracksByPerformer")) {
             String performer = request.getParameter("performer");
             tracks = trackService.getTracksByBandname(performer);
             request.setAttribute("tracks", tracks);
@@ -62,30 +60,35 @@ public class TrackPageController extends HttpServlet {
 
         try {
             request.getRequestDispatcher(url).forward(request, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
         throws ServletException, IOException {
-        //TODO: implement doPost for putting data in database or deleting or updating data
         String userPath = request.getServletPath();
 
-        if(userPath.equals("/addTrack")) {
+        if (userPath.equals("/addTrack")) {
             String performer = request.getParameter("performer");
             String title = request.getParameter("title");
             String url = request.getParameter("url");
             double duration = Double.parseDouble(request.getParameter("duration"));
 
             trackService.create(performer, title, url, duration);
-            //TODO: create popup box with "track created" message
+            //TODO: 13-5-2016 : create popup box with "track created" message
             tracks = trackService.findAll();
             request.setAttribute("tracks", tracks);
-        }
-
-        else if(userPath.equals("/deleteTrack")) {
+        } else if (userPath.equals("/deleteTrack")) {
             System.out.println("deleting track");
             int trackId = Integer.parseInt(request.getParameter("trackId"));
             trackService.delete(trackId);
@@ -97,7 +100,7 @@ public class TrackPageController extends HttpServlet {
 
         try {
             request.getRequestDispatcher(url).forward(request, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

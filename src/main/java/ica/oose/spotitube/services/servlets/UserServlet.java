@@ -1,14 +1,10 @@
-/* This is for JSP */
-/* Is used by viewPlaylists.jsp */
-
 package ica.oose.spotitube.services.servlets;
 
 import ica.oose.spotitube.datasource.util.DatabaseProperties;
-import ica.oose.spotitube.datasource.util.TrackDAO;
-import ica.oose.spotitube.domain.Track;
+import ica.oose.spotitube.datasource.util.UserDAO;
+import ica.oose.spotitube.domain.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,25 +13,23 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * Created by Vincent on 22-1-2016.
+ * Created by Vincent on 25-5-2016.
  */
-@WebServlet
-public class TrackServlet extends HttpServlet {
+public class UserServlet extends HttpServlet {
+
     private DatabaseProperties databaseProperties;
-    private TrackDAO trackDAO;
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         // required initialization
         databaseProperties = new DatabaseProperties();
-        trackDAO= new TrackDAO(databaseProperties);
+        userDAO= new UserDAO(databaseProperties);
     }
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // get all tracks from database
-        List<Track> tracks = trackDAO.findAll();
+        List<User> users = userDAO.findAll();
 
         // put data on screen
         PrintWriter out = response.getWriter();
@@ -48,21 +42,17 @@ public class TrackServlet extends HttpServlet {
                 "<body> \n" +
                 "<table>" +
                 "<thead>" +
-                "<th>TrackId</th>" +
-                "<th>Bandname</th>" +
-                "<th>Title</th>" +
-                "<th>URL</th>" +
-                "<th>Duration</th>" +
+                "<th>UserId</th>" +
+                "<th>Username</th>" +
+                "<th>Password</th>" +
                 "</thead>" +
                 "<tbody>");
-        for (Track track: tracks) {
+        for (User user: users) {
             out.println(
                     "<tr>" +
-                            "<td>" + track.getTrackId() + "</td>" +
-                            "<td>" + track.getPerformer() + "</td>" +
-                            "<td>" + track.getTitle() + "</td>" +
-                            "<td>" + track.getUrl() + "</td>" +
-                            "<td>" + track.getDuration() + "</td>");
+                            "<td>" + user.getUserId() + "</td>" +
+                            "<td>" + user.getUserName() + "</td>" +
+                            "<td>" + user.getPassword() + "</td>");
         }
         out.println("</tbody>" +
                 "</table>" +
@@ -70,10 +60,8 @@ public class TrackServlet extends HttpServlet {
                 "</html>");
     }
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-
 }

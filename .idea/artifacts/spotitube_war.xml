@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="Spotitube:war">
+  <artifact type="war" name="spotitube:war">
     <output-path>$PROJECT_DIR$/target</output-path>
     <root id="archive" name="spotitube.war">
-      <element id="artifact" artifact-name="Spotitube:war exploded" />
+      <element id="artifact" artifact-name="spotitube:war exploded" />
     </root>
   </artifact>
 </component>

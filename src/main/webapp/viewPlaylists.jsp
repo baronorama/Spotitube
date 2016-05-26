@@ -15,7 +15,7 @@
         <title>Playlist</title>
     </head>
     <body>
-    <form action="jspPlaylist"> Please enter a name <br>
+    <form action="playlistsByOwner"> Please enter a name <br>
         <input type="text" name="owner"size="20px">
         <input type="submit" value="submit">
     </form>

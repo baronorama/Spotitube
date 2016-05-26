@@ -31,7 +31,7 @@ public class TrackService implements TrackServiceInterface {
 
     @Override
     public List<Track> getTracksByBandname(String performer) {
-        return null;
+        return trackDAO.findAllByBandname(performer);
     }
 
     @Override

@@ -18,34 +18,32 @@ Uses TrackPageController.java
         <title>Overview all tracks</title>
         <%-- get link to css right! --%>
 <%--
-        <link rel="stylesheet" type="text/css" href="<%=application.getContextPath() %>/../css/tracks.css" />
+        <link rel="stylesheet" type="text/css" href="<%=application.getContextPath() %>/../css/style.css" />
 --%>
-        <style><%@include file="../css/tracks.css" %></style>
+        <style><%@include file="../css/style.css" %></style>
     </head>
     <body>
         <div id=header">
             <h1 align="center">View tracks</h1>
         </div>
         <div id="main">
-            <table id="tracktable">
-                <thead>
-                    <th>trackId</th>
-                    <th>Performer</th>
-                    <th>Title</th>
-                    <th>URL</th>
-                    <th>Duration</th>
-                </thead>
-                <tbody>
-                    <c:forEach items="${tracks}" var="track">
-                        <tr>
-                            <td><c:out value="${track.trackId}"/></td>
-                            <td><c:out value="${track.performer}"/></td>
-                            <td><c:out value="${track.title}"/></td>
-                            <td><c:out value="${track.url}"/></td>
-                            <td><c:out value="${track.duration}"/></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
+            <table class="overviewTable">
+                <tr>
+                    <td>trackId</td>
+                    <td>Performer</td>
+                    <td>Title</td>
+                    <td>URL</td>
+                    <td>Duration</td>
+                </tr>
+                <c:forEach items="${tracks}" var="track">
+                    <tr>
+                        <td><c:out value="${track.trackId}"/></td>
+                        <td><c:out value="${track.performer}"/></td>
+                        <td><c:out value="${track.title}"/></td>
+                        <td><c:out value="${track.url}"/></td>
+                        <td><c:out value="${track.duration}"/></td>
+                    </tr>
+                </c:forEach>
             </table>
         </div>
     </body>

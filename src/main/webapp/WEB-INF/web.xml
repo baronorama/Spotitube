@@ -24,6 +24,14 @@
         <servlet-name>viewTracks</servlet-name>
         <url-pattern>/jspTracks</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>viewUser</servlet-name>
+        <servlet-class>ica.oose.spotitube.services.servlets.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewUser</servlet-name>
+        <url-pattern>/jspUser</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <description>JAX-RS Tools Generated - Do not modify</description>
