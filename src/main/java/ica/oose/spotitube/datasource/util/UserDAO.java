@@ -38,11 +38,12 @@ public class UserDAO {
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         tryFindAll(users);
+        System.out.println(users);
         return users;
     }
 
     private void tryFindAll(List<User> users) {
-        String GET_QUERY = "SELECT * FROM users";
+        String GET_QUERY = "SELECT * FROM users2";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
             PreparedStatement preparedStatement = connection.prepareStatement(GET_QUERY);
@@ -58,11 +59,14 @@ public class UserDAO {
         while (resultSet.next()) {
             addNewItemFromDatabase(users, resultSet);
         }
+        System.out.println(users);
     }
 
     private void addNewItemFromDatabase(List<User> users, ResultSet resultSet) throws SQLException {
         User user = new User(
-                resultSet.getInt("userId"), resultSet.getString("username"), resultSet.getString("password")
+                resultSet.getInt("userId"), resultSet.getString("username"),
+                resultSet.getString("password"), resultSet.getBoolean("isPaidAccount"),
+                resultSet.getBoolean("isAdmin")
         );
         users.add(user);
     }
@@ -74,7 +78,7 @@ public class UserDAO {
     }
 
     private void tryFindUserByName(List<User> users, String username) {
-        String SELECT_QUERY = "SELECT * FROM users WHERE username is ?";
+        String SELECT_QUERY = "SELECT * FROM users2 WHERE username is ?";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
             connection.setAutoCommit(false);
@@ -87,13 +91,13 @@ public class UserDAO {
         }
     }
 
-    public void deleteUserById(int userId) {
-        String DELETE_QUERY = "DELETE FROM users WHERE userId = ?";
+    public void deleteUserByName(String username) {
+        String DELETE_QUERY = "DELETE FROM users2 WHERE username = ?";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
-            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(1, username);
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e){
@@ -108,7 +112,7 @@ public class UserDAO {
     }
 
     private void tryFindUserById(List<User> users, String userId) {
-        String SELECT_QUERY = "SELECT * FROM users WHERE userId is ?";
+        String SELECT_QUERY = "SELECT * FROM users2 WHERE userId is ?";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
             connection.setAutoCommit(false);
@@ -122,7 +126,7 @@ public class UserDAO {
     }
 
     public void resetPassword(String userId) {
-        String RESET_QUERY = "UPDATE users SET password='' WHERE userId = ?";
+        String RESET_QUERY = "UPDATE users2 SET password='' WHERE userId = ?";
         try {
             Connection connection = DriverManager.getConnection((databaseProperties.connectionString()));
             connection.setAutoCommit(false);
@@ -135,8 +139,8 @@ public class UserDAO {
         }
     }
 
-    public void addUser(String username, String password) {
-        String CREATE_QUERY = "INSERT INTO users(username, password) VALUES (?, ?)";
+    public void addUser(String username, String password, boolean isPaidAccount, boolean isAdmin) {
+        String CREATE_QUERY = "INSERT INTO users2(username, password, isPaidAccount, isAdmin) VALUES (?, ?, ?, ?)";
 
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
@@ -144,6 +148,8 @@ public class UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_QUERY);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
+            preparedStatement.setBoolean(3, isPaidAccount);
+            preparedStatement.setBoolean(4, isAdmin);
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

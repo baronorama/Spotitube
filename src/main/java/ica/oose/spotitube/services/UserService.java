@@ -20,8 +20,13 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void deleteUser(int userId) {
-        userDAO.deleteUserById(userId);
+    public void addUser(String username, String password, boolean isPaidAccount, boolean isAdmin) {
+        userDAO.addUser(username, password, isPaidAccount, isAdmin);
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        userDAO.deleteUserByName(username);
     }
 
     @Override
@@ -32,10 +37,5 @@ public class UserService implements UserServiceInterface {
     @Override
     public void manageSpotifyData(String clienId, String clientSecret) {
         //TODO: think of managing strategy and implement method
-    }
-
-    @Override
-    public void addUser(String username, String password) {
-        userDAO.addUser(username, password);
     }
 }

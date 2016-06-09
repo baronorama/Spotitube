@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface UserServiceInterface {
     List<User> getAllUsers();
-    void addUser(String username, String password);
-    void deleteUser(int userId);
+    void addUser(String username, String password, boolean isPaidAccount, boolean isAdmin);
+    void deleteUser(String username);
     void resetPassword(String userId);
     void manageSpotifyData(String client_id, String client_secret);
 }

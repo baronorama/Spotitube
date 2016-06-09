@@ -29,7 +29,7 @@ import java.util.List;
                 "/showUsers",
                 "/addUser",
                 "/deleteUser"
-                })
+        })
 public class UserPageController extends HttpServlet {
     private UserService userService = new UserService();
     private List<User> users;
@@ -42,8 +42,8 @@ public class UserPageController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
+    protected final void doGet(HttpServletRequest request,
+                               HttpServletResponse response)
             throws ServletException, IOException {
         String userPath = request.getServletPath();
 
@@ -64,30 +64,33 @@ public class UserPageController extends HttpServlet {
         try {
             request.getRequestDispatcher(url).forward(request, response);
         } catch (Exception e) {
-            System.out.println("in catch of GET_ManagerPageController");
+            System.out.println("in catch of GET_UserPageController");
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
-        throws ServletException, IOException {
+    protected final void doPost(HttpServletRequest request,
+                                HttpServletResponse response)
+            throws ServletException, IOException {
         String userPath = request.getServletPath();
 
         if (userPath.equals("/addUser")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            userService.addUser(username, password);
+            boolean isPaidAccount = Boolean.parseBoolean(request.getParameter("isPaidAccount"));
+            boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
+            userService.addUser(username, password, isPaidAccount, isAdmin);
             //TODO: give message that user is created
             users = userService.getAllUsers();
             request.setAttribute("users", users);
         }
 
         if (userPath.equals("/deleteUser")) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            System.out.println("deleting user with userId " + userId + ".");
-            userService.deleteUser(userId);
+            String username = request.getParameter("username");
+            System.out.println("deleting user with username " + username + ".");
+            //TODO: give message that user is deleted
+            userService.deleteUser(username);
             users = userService.getAllUsers();
             request.setAttribute("users", users);
         }
