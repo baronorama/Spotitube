@@ -51,7 +51,7 @@ public class UserServlet extends HttpServlet {
             out.println(
                     "<tr>" +
                             "<td>" + user.getUserId() + "</td>" +
-                            "<td>" + user.getUserName() + "</td>" +
+                            "<td>" + user.getUsername() + "</td>" +
                             "<td>" + user.getPassword() + "</td>");
         }
         out.println("</tbody>" +

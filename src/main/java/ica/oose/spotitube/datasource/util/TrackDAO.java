@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @Singleton
 public class TrackDAO {
     private Logger logger = Logger.getLogger(TrackDAO.class.getName());
-    private final DatabaseProperties databaseProperties;
+    protected final DatabaseProperties databaseProperties;
 
     @Inject
     public TrackDAO(DatabaseProperties databaseProperties) {
@@ -40,7 +40,7 @@ public class TrackDAO {
         return tracks;
     }
 
-    private void tryFindAll(List<Track> tracks) {
+    protected void tryFindAll(List<Track> tracks) {
         String GET_QUERY = "SELECT * FROM track";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
@@ -71,7 +71,7 @@ public class TrackDAO {
         }
     }
 
-    private void tryFindAllById(List<Track> tracks, int trackId) {
+    protected void tryFindAllById(List<Track> tracks, int trackId) {
         String GET_QUERY = "SELECT * FROM track WHERE trackId = ?";
         try {
             Connection connection = DriverManager.getConnection(databaseProperties.connectionString());
@@ -85,7 +85,7 @@ public class TrackDAO {
         }
     }
 
-    private void addNewItemsFromDatabase(List<Track> tracks, PreparedStatement preparedStatement) throws SQLException {
+    protected void addNewItemsFromDatabase(List<Track> tracks, PreparedStatement preparedStatement) throws SQLException {
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             addNewItemFromDatabase(tracks, resultSet);
